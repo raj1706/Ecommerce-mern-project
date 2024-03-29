@@ -21,7 +21,7 @@ const About = () => {
                             src=""
                             alt="Founder"
                         />
-                        <Header>Rajendra Raut</Header>
+                        <Header>Rajendra R Raut</Header>
                         <Button onClick={visitInstagram} color="primary">
                             Visit Instagram 
                         </Button>
