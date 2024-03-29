@@ -23,7 +23,7 @@ const About = () => {
                         />
                         <Header>Rajendra Raut</Header>
                         <Button onClick={visitInstagram} color="primary">
-                            Visit Instagram
+                            Visit Instagram 
                         </Button>
                         <span>
 
