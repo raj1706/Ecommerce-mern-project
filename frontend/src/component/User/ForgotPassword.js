@@ -7,10 +7,12 @@ import { clearErrors, forgotPassword } from "../../actions/userAction";
 import MetaData from "../layout/MetaData";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 
 const ForgotPassword = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { error, message, loading } = useSelector(
         (state) => state.forgotPassword
@@ -35,6 +37,7 @@ const ForgotPassword = () => {
 
         if (message) {
             toast.success(message);
+            navigate("/login");
         }
     }, [dispatch, error, message]);
 

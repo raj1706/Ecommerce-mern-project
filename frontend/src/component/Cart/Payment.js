@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom"
 import "./Payment.css";
 import { toast } from "react-toastify";
 
+const proxy = process.env.REACT_APP_PROXY;
+
 const Payment = () => {
     const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
     const [Razorpay] = useRazorpay();
@@ -36,8 +38,13 @@ const Payment = () => {
         payBtn.current.disabled = true;
 
         try {
-            const { data } = await axios.post("/api/v1/payment/process", {
+            const token = localStorage.getItem('token');
+            const { data } = await axios.post(`${proxy}/api/v1/payment/process`, {
                 amount: orderInfo.totalPrice,
+            }, {
+                headers: {
+                    Authorization: token
+                }
             });
             const options = data.options;
             const successCallback = (payment_id) => {

@@ -99,7 +99,30 @@ exports.forgetPassword = catchErrors(async (req, res, next) => {
 
         const resetPasswordUrl = `${process.env.FORGET_LINK}password/reset/${resetToken}`;
 
-        const message = `Your password reset link is :- \n\n ${resetPasswordUrl}`;
+        const emailTemplate = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Password Reset</title>
+                <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+            </head>
+            <body>
+                <div class="container">
+                    <div class="jumbotron">
+                        <h1 class="display-4">Password Reset</h1>
+                        <p class="lead">Hello ${user.name},</p>
+                        <p class="lead">You have requested to reset your password. Please click the following link to reset it:</p>
+                        <a class="btn btn-primary" href="${resetPasswordUrl}" role="button">Reset Password</a>
+                        <hr class="my-4">
+                        <p class="lead">If you did not request this, please ignore this email.</p>
+                        <p class="lead">Thank you</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
 
 
         var defaultClient = SibApiV3Sdk.ApiClient.instance;
@@ -112,7 +135,7 @@ exports.forgetPassword = catchErrors(async (req, res, next) => {
             sender,
             to: receivers,
             subject: "Reset Password",
-            textContent: `${message}`
+            htmlContent: emailTemplate
         }).then(() => {
             res.status(200).json({
                 success: true,

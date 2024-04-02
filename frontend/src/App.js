@@ -41,6 +41,7 @@ import AdminRoute from './component/Routes/AdminRoute.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store } from './store';
 import About from './component/layout/About/About.js';
+import Contact from './component/layout/Contact/Contact.js';
 
 function App() {
   const { user, isAuthenticated } = useSelector((state) => state.user);
@@ -66,6 +67,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/login" element={<LoginSignUp />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/account"
           element={<ProtectedRoute>

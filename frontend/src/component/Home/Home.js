@@ -6,13 +6,15 @@ import MetaData from "../layout/MetaData";
 import { clearErrors, getProduct } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Home = () => {
     const dispatch = useDispatch();
     const { loading, error, products } = useSelector((state) => state.products);
 
     useEffect(() => {
         if (error) {
+            toast.error(error)
             dispatch(clearErrors());
         }
         dispatch(getProduct());

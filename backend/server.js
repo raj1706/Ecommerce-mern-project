@@ -2,6 +2,7 @@ const app = require("./app");
 const dotenv = require('dotenv');
 const connectDatabase = require("./config/database");
 const cloudinary = require('cloudinary');
+const cors = require('cors');
 dotenv.config();
 
 //handling uncaught exception

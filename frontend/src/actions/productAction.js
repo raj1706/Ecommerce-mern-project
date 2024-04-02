@@ -31,18 +31,20 @@ import {
     CLEAR_ERRORS
 } from "../constants/productConstants";
 
+const proxy = process.env.REACT_APP_PROXY;
+
+// get all products
 export const getProduct =
     (keyword = "", currentPage = 1, price = [0, 100000], category, ratings = 0) =>
         async (dispatch) => {
             try {
                 dispatch({ type: ALL_PRODUCT_REQUEST });
 
-                let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
+                let link = `${proxy}/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
 
                 if (category) {
-                    link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
+                    link = `${proxy}/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
                 }
-
                 const { data } = await axios.get(link);
 
                 dispatch({
@@ -57,11 +59,18 @@ export const getProduct =
             }
         };
 
+// get produdct details  by id
 export const getProductDetails = (id) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_DETAILS_REQUEST });
 
-        const { data } = await axios.get(`/api/v1/product/${id}`);
+        const config = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
+        const { data } = await axios.get(`${proxy}/api/v1/product/${id}`, config);
 
         dispatch({
             type: PRODUCT_DETAILS_SUCCESS,
@@ -75,16 +84,20 @@ export const getProductDetails = (id) => async (dispatch) => {
     }
 };
 
-// NEW REVIEW
+
+// create new review
 export const newReview = (reviewData) => async (dispatch) => {
     try {
         dispatch({ type: NEW_REVIEW_REQUEST });
 
         const config = {
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem('token')
+            },
         };
 
-        const { data } = await axios.put(`/api/v1/review`, reviewData, config);
+        const { data } = await axios.put(`${proxy}/api/v1/review`, reviewData, config);
 
         dispatch({
             type: NEW_REVIEW_SUCCESS,
@@ -98,12 +111,18 @@ export const newReview = (reviewData) => async (dispatch) => {
     }
 };
 
-// Get All Reviews of a Product
+// get all Product Reviews
 export const getAllReviews = (id) => async (dispatch) => {
     try {
         dispatch({ type: ALL_REVIEW_REQUEST });
 
-        const { data } = await axios.get(`/api/v1/reviews?id=${id}`);
+        const config = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
+        const { data } = await axios.get(`${proxy}/api/v1/reviews?id=${id}`, config);
 
         dispatch({
             type: ALL_REVIEW_SUCCESS,
@@ -117,14 +136,19 @@ export const getAllReviews = (id) => async (dispatch) => {
     }
 };
 
-// Delete Review of a Product
+// delete reviews
 export const deleteReviews = (reviewId, productId) => async (dispatch) => {
     try {
         dispatch({ type: DELETE_REVIEW_REQUEST });
 
+        const config = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
         const { data } = await axios.delete(
-            `/api/v1/reviews?id=${reviewId}&productId=${productId}`
-        );
+            `${proxy}/api/v1/reviews?id=${reviewId}&productId=${productId}`, config);
 
         dispatch({
             type: DELETE_REVIEW_SUCCESS,
@@ -138,12 +162,18 @@ export const deleteReviews = (reviewId, productId) => async (dispatch) => {
     }
 };
 
-// Get All Products For Admin
+// get products for adming
 export const getAdminProduct = () => async (dispatch) => {
     try {
         dispatch({ type: ADMIN_PRODUCT_REQUEST });
 
-        const { data } = await axios.get("/api/v1/admin/products");
+        const config = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
+        const { data } = await axios.get(`${proxy}/api/v1/admin/products`, config);
 
         dispatch({
             type: ADMIN_PRODUCT_SUCCESS,
@@ -157,7 +187,7 @@ export const getAdminProduct = () => async (dispatch) => {
     }
 };
 
-// Create Product
+// create product
 export const createProduct = (productData) => async (dispatch) => {
     try {
         dispatch({ type: NEW_PRODUCT_REQUEST });
@@ -165,13 +195,14 @@ export const createProduct = (productData) => async (dispatch) => {
         const config = {
             headers: {
                 "Content-Type": "multipart/form-data",
+                Authorization: localStorage.getItem('token')
             },
             maxContentLength: Infinity,
             maxBodyLength: Infinity,
         };
 
         const { data } = await axios.post(
-            `/api/v1/admin/product/new`,
+            `${proxy}/api/v1/admin/product/new`,
             productData,
             config
         );
@@ -189,17 +220,20 @@ export const createProduct = (productData) => async (dispatch) => {
     }
 };
 
-// Update Product
+//update product
 export const updateProduct = (id, productData) => async (dispatch) => {
     try {
         dispatch({ type: UPDATE_PRODUCT_REQUEST });
 
         const config = {
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: localStorage.getItem('token')
+            },
         };
 
         const { data } = await axios.put(
-            `/api/v1/admin/product/${id}`,
+            `${proxy}/api/v1/admin/product/${id}`,
             productData,
             config
         );
@@ -216,12 +250,18 @@ export const updateProduct = (id, productData) => async (dispatch) => {
     }
 };
 
-// Delete Product
+// delete product
 export const deleteProduct = (id) => async (dispatch) => {
     try {
         dispatch({ type: DELETE_PRODUCT_REQUEST });
 
-        const { data } = await axios.delete(`/api/v1/admin/product/${id}`);
+        const config = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
+        const { data } = await axios.delete(`${proxy}/api/v1/admin/product/${id}`, config);
 
         dispatch({
             type: DELETE_PRODUCT_SUCCESS,

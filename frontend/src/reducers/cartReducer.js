@@ -2,7 +2,9 @@ import {
     ADD_TO_CART,
     REMOVE_CART_ITEM,
     SAVE_SHIPPING_INFO,
-    CLEAR_CART
+    CLEAR_CART,
+    CLEAR_ERRORS,
+    CART_ADD_FAIL
 } from "../constants/cartConstants";
 
 export const cartReducer = (
@@ -47,6 +49,18 @@ export const cartReducer = (
             return {
                 ...state,
                 shippingInfo: action.payload,
+            };
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null,
+            };
+
+        case CART_ADD_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
             };
 
         default:

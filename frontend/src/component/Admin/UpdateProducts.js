@@ -47,9 +47,14 @@ const UpdateProduct = () => {
         "Attire",
         "Camera",
         "SmartPhones",
+        "others"
     ];
 
     const productId = id;
+
+    useEffect(() => {
+        dispatch(getProductDetails(productId));
+    }, [dispatch]);
 
     useEffect(() => {
         if (product && product._id !== productId) {
@@ -74,8 +79,8 @@ const UpdateProduct = () => {
 
         if (isUpdated) {
             toast.success("Product updated successfully");
-            Navigate("/admin/products");
             dispatch({ type: UPDATE_PRODUCT_RESET });
+            Navigate("/admin/products");
         }
     }, [
         dispatch,
@@ -90,8 +95,7 @@ const UpdateProduct = () => {
 
     const updateProductSubmitHandler = (e) => {
         e.preventDefault();
-
-        if (!name || !price || !description || !category || !Stock || images.length <= 0) {
+        if (!name || !price || !description || !category || !Stock) {
             {
                 return toast.warning('All values are required');
             }
